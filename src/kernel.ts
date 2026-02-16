@@ -17,7 +17,7 @@
  *   - Session logging with crash-safe partial writes
  *   - Auto-detect screen resolution & foreground app
  *   - 15 actions: tap, type, enter, swipe, home, back, wait, done,
- *     longpress, screenshot, launch, clear, clipboard_get, clipboard_set, shell
+ *     longpress, screenshot, launch, clear, clipboard_get, clipboard_set
  *
  * Usage:
  *     bun run src/kernel.ts

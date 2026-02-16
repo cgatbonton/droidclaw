@@ -228,7 +228,7 @@ function executeFlowStep(
       }
 
       case "shell":
-        return executeAction({ action: "shell", command: String(value) });
+        return { success: false, message: "shell action is disabled for security" };
 
       case "keyevent":
         return executeAction({ action: "keyevent", code: Number(value) });

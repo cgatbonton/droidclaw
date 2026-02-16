@@ -4,9 +4,11 @@
  *
  * Supported actions (28):
  *   tap, type, enter, swipe, home, back, wait, done,
- *   longpress, screenshot, launch, clear, clipboard_get, clipboard_set, paste, shell,
+ *   longpress, screenshot, launch, clear, clipboard_get, clipboard_set, paste,
  *   submit_message, copy_visible_text, wait_for_content, find_and_tap, compose_email,
- *   open_url, switch_app, notifications, pull_file, push_file, keyevent, open_settings
+ *   open_url, switch_app, notifications, keyevent, open_settings
+ *
+ * REMOVED for security: shell, pull_file, push_file
  */
 
 import { Config } from "./config.js";
@@ -37,7 +39,7 @@ export interface ActionDecision {
   activity?: string;
   uri?: string;
   extras?: Record<string, string>;
-  // shell action
+  // shell action (REMOVED — security risk)
   command?: string;
   // screenshot action
   filename?: string;
@@ -50,9 +52,9 @@ export interface ActionDecision {
   query?: string; // email address for compose_email, search term for find_and_tap/copy_visible_text
   // open_url action
   url?: string;
-  // pull_file action
+  // pull_file action (REMOVED — security risk)
   path?: string;
-  // push_file action
+  // push_file action (REMOVED — security risk)
   source?: string;
   dest?: string;
   // keyevent action
@@ -195,7 +197,7 @@ export function executeAction(action: ActionDecision): ActionResult {
     case "paste":
       return executePaste(action);
     case "shell":
-      return executeShell(action);
+      return { success: false, message: "shell action is disabled for security" };
     case "scroll":
       return executeScroll(action);
     case "open_url":
@@ -205,9 +207,9 @@ export function executeAction(action: ActionDecision): ActionResult {
     case "notifications":
       return executeNotifications();
     case "pull_file":
-      return executePullFile(action);
+      return { success: false, message: "pull_file action is disabled for security" };
     case "push_file":
-      return executePushFile(action);
+      return { success: false, message: "push_file action is disabled for security" };
     case "keyevent":
       return executeKeyevent(action);
     case "open_settings":

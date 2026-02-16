@@ -89,12 +89,7 @@ Data:
 
 Device & Files:
   {"action": "notifications", "reason": "Read notification bar content"}
-  {"action": "pull_file", "path": "/sdcard/Download/file.pdf", "reason": "Pull file from device"}
-  {"action": "push_file", "source": "./file.pdf", "dest": "/sdcard/Download/file.pdf", "reason": "Push file to device"}
   {"action": "keyevent", "code": 187, "reason": "Send keycode (187=recent apps, 26=power, etc.)"}
-
-System:
-  {"action": "shell", "command": "am force-stop com.app.broken", "reason": "Kill crashed app"}
   {"action": "wait", "reason": "Wait for screen to load"}
   {"action": "done", "reason": "Task is complete"}
 
@@ -173,7 +168,7 @@ GOAL-ORIENTED THINKING: Focus on WHAT you need to accomplish, not on rigidly fol
 - Goal says "open app X"? Use "launch" with package name instead of hunting for icons.
 
 SMART DECISION PRIORITIES: When multiple approaches can achieve the same result, prefer:
-1. Programmatic actions (clipboard_set, launch, shell) — most reliable, no UI dependency.
+1. Programmatic actions (clipboard_set, launch) — most reliable, no UI dependency.
 2. Direct input (type, paste, enter) — reliable when field is focused.
 3. UI button interactions (tap, longpress) — LEAST reliable, depends on correct coordinates.
 Before choosing an action, ask: "Is there a simpler, more direct way to do this?"
@@ -182,7 +177,7 @@ PATIENCE WITH LOADING: AI chatbots (ChatGPT, Gemini, Claude) take 5-15 seconds t
 
 ESCAPE STUCK LOOPS — when stuck, try in this priority order:
 1. The action may have already succeeded silently — MOVE ON to the next task step.
-2. Use programmatic alternatives (clipboard_set, type, shell, launch with URI).
+2. Use programmatic alternatives (clipboard_set, type, launch with URI).
 3. Try a completely different UI element or interaction method.
 4. Navigate away (back, home) ONLY as an absolute last resort — this loses progress.`;
 
@@ -349,7 +344,7 @@ const actionDecisionSchema = z.object({
   think: z.string().optional().describe("Your reasoning about the current screen state and what to do next"),
   plan: z.array(z.string()).optional().describe("3-5 high-level steps to achieve the goal"),
   planProgress: z.string().optional().describe("Which plan step you are currently on"),
-  action: z.string().describe("The action to take: tap, type, scroll, enter, back, home, wait, done, longpress, launch, clear, clipboard_get, clipboard_set, paste, shell, open_url, switch_app, notifications, pull_file, push_file, keyevent, open_settings, read_screen, submit_message, copy_visible_text, wait_for_content, find_and_tap, compose_email"),
+  action: z.string().describe("The action to take: tap, type, scroll, enter, back, home, wait, done, longpress, launch, clear, clipboard_get, clipboard_set, paste, open_url, switch_app, notifications, keyevent, open_settings, read_screen, submit_message, copy_visible_text, wait_for_content, find_and_tap, compose_email"),
   coordinates: z.tuple([z.number(), z.number()]).optional().describe("Target field as [x, y] — used by tap, longpress, type, and paste"),
   text: z.string().optional().describe("Text to type, clipboard text, or email body for compose_email"),
   direction: z.string().optional().describe("Scroll direction: up, down, left, right"),
@@ -358,13 +353,13 @@ const actionDecisionSchema = z.object({
   activity: z.string().optional().describe("Activity name for launch action"),
   uri: z.string().optional().describe("URI for launch action"),
   extras: z.record(z.string(), z.string()).optional().describe("Intent extras for launch action"),
-  command: z.string().optional().describe("Shell command to run"),
+  command: z.string().optional().describe("(disabled)"),
   filename: z.string().optional().describe("Screenshot filename"),
   query: z.string().optional().describe("Email address for compose_email (REQUIRED), search term for find_and_tap (REQUIRED), or filter for copy_visible_text"),
   url: z.string().optional().describe("URL to open for open_url action"),
-  path: z.string().optional().describe("Device file path for pull_file action"),
-  source: z.string().optional().describe("Local file path for push_file action"),
-  dest: z.string().optional().describe("Device destination path for push_file action"),
+  path: z.string().optional().describe("(disabled)"),
+  source: z.string().optional().describe("(disabled)"),
+  dest: z.string().optional().describe("(disabled)"),
   code: z.number().optional().describe("Android keycode number for keyevent action"),
   setting: z.string().optional().describe("Setting name for open_settings: wifi, bluetooth, display, sound, battery, location, apps, date, accessibility, developer"),
 });
